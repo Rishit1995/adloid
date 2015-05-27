@@ -1,0 +1,36 @@
+{
+  "manifest_version": 2,
+
+  "name": "Banana ",
+  "short_name": "Banana",
+  "description": "Best coupon for you!",
+  "version": "1.0.0",
+
+  "icons": {
+    "16": "img/icons/16x16.png",
+    "36": "img/icons/36x36.png",
+    "48": "img/icons/48x48.png",
+    "96": "img/icons/96x96.png",
+    "128": "img/icons/128x128.png" },
+  
+  "web_accessible_resources": [
+    "apply-coupons-icon.png"
+  ],
+  
+  "browser_action": {
+    "default_icon": "img/icons/16x16.png",
+    "default_popup": "popup.html",
+    "default_title":  "Banana"
+  },
+
+  "background": {
+    "scripts": ["extra/jquery-1.11.2.min.js", "background.js"],
+    "persistent": false
+  },
+  
+  "permissions": [
+    "activeTab",
+    "storage",
+    "tabs"
+  ]
+}
