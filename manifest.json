@@ -27,7 +27,32 @@
     "scripts": ["extra/jquery-1.11.2.min.js", "background.js"],
     "persistent": false
   },
-  
+  "content_scripts": [
+    {
+      "matches": ["https://secure.payu.in/*"],
+      "css": ["vendor/toastr.min.css", "foodpanda/css/foodpanda.css"],
+      "js": ["vendor/jquery-1.11.2.min.js", "vendor/toastr.min.js", "payumoney/js/payu.js"]
+    },
+    {
+      "matches": ["https://www.payumoney.com/payments/*"],
+      "css": ["vendor/toastr.min.css", "foodpanda/css/foodpanda.css"],
+      "js": ["vendor/jquery-1.11.2.min.js", "vendor/toastr.min.js", "payumoney/js/payumoney.js"]
+    },
+    {
+      "matches": ["https://www.foodpanda.in/checkout/*"],
+      "css": ["vendor/toastr.min.css", "foodpanda/css/foodpanda.css"],
+      "js": ["vendor/jquery-1.11.2.min.js", "vendor/toastr.min.js", "foodpanda/js/foodpanda-checkout.js"]
+    },
+    {
+      "matches": ["https://www.foodpanda.in/review-order/*"],
+      "css": ["vendor/toastr.min.css", "foodpanda/css/foodpanda.css"],
+      "js": ["vendor/jquery-1.11.2.min.js", "vendor/toastr.min.js", "foodpanda/js/foodpanda-reviewOrder.js"]
+    },
+    {
+      "matches": ["https://www.foodpanda.in/restaurants"],
+      "js": ["vendor/jquery-1.11.2.min.js", "foodpanda/js/foodpandaGetArea.js"]
+    }
+  ],
   "permissions": [
     "activeTab",
     "storage",
