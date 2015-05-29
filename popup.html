@@ -1,14 +1,37 @@
 <!doctype html>
 <html>
   <head>
-    <title>Banana</title>
-
+    <title>Brthe</title>
+    
+    <link href="extra/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="popup.css">
 
     <script src="extra/jquery-1.11.2.min.js"></script>
     <script src="popup.js"></script>
   </head>
+
   <body>
-    <a href="http://www.google.com">Here</a>
+
+     <form id="myForm" class="form-signin" role="form">
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <input type="email" name="email" class="form-control" placeholder="Email address" required="" autofocus="">
+        <input type="password" name="password" class="form-control" placeholder="Password" required="">
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" value="remember-me"> Remember me
+            </label>
+        </div>
+        <input class="btn btn-lg btn-primary btn-block" type="submit" value="Click me!">
+    </form>
+  	
+  	<footer id="options">
+  		<a href="http://fb.com/brthe.co">
+  			<img id="social" src="img/social/facebook.png" height="36px" width="56px">
+  		</a>
+  		<a href="http://twitter.com/BrtheCo">
+  			<img id="social" src="img/social/twitter.png" height="36px" width="56px">
+  		</a>
+  	</footer>
+  
   </body>
 </html>

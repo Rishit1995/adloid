@@ -9,42 +9,20 @@ document.addEventListener('DOMContentLoaded', function () {
             };
         })();
     }
+    // chrome.runtime.sendMessage({message: "isUser"}, function(response) {
+    //   console.log("request made");
+    //   console.log(response.msg);
+    // });
+    $('.form-signin').on('submit', function(e){
+        //Prevent Default Submit Event
+        e.preventDefault();
+    
+        // Get data from the form and put them into variables
+        var data = $(this).serializeArray();
+        var email = data[0].value;
+        var password = data[1].value;
+        console.log(email);
+        console.log(password);
+    });
 });
 
-// $('.form-signin').on('submit', function(e) {
-//
-//     // Prevent Default Submit Event
-//     e.preventDefault();
-//
-//     // Get data from the form and put them into variables
-//     var data = $(this).serializeArray(),
-//         email = data[0].value,
-//         password = data[1].value;
-//
-//     // Call Parse Login function with those variables
-//     Parse.User.logIn(email, password, {
-//         // If the username and password matches
-//         success: function(user) {
-//             alert('Welcome!');
-//         },
-//         // If there is an error
-//         error: function(user, error) {
-//             console.log(error);
-//         }
-//     });
-//
-// });
-
-// chrome.runtime.onMessage.addListener(
-//   function(request, sender, sendResponse) {
-//     console.log("received response");
-//
-//     console.log(request.message);
-//     alert(request.message);
-//     // if (request.message == "voucherFetched") {
-//     //   sendResponse({message: "goodbye"});
-//     //
-//     //   toastr.options.timeOut = 60000;
-//     //   toastr.info("Enter voucher code '" + request.voucher + "'.");
-//     // }
-// });

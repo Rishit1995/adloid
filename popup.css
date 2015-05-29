@@ -1,0 +1,62 @@
+body{
+  min-width: 300px;
+  margin: 0px;
+  font-family: Segoe UI, Arial, sans-serif;
+  font-size: 13px;
+  color: #545454;
+  background-color: #ffffff;
+  /*background-color: #f8f6f2;*/
+}
+header {
+	height: 52px;
+	margin-bottom: 0px;
+	border-bottom: 1px solid #e1ddd8;
+	background-color:#010638;
+}
+#logo {
+	display: block;
+	position: relative;
+	top: 15px;
+	margin: 0px auto;
+}
+footer {
+	cursor: pointer;
+	padding: 20px 55px;
+	border-top: 1px solid #e1ddd8;
+	background-color:#010638;
+}
+#social{
+	position: relative;
+	padding:0px 10px;
+}
+#wrapper{
+	display:block;
+	padding:20px 0px;
+	margin-top:20px;
+}
+.service{
+	display:block;
+	border: 1px solid #FFF;
+	border-radius: 2px;
+	display: inline-block;
+	text-align:center;
+	height: 108px;
+	/*width: 108px;*/
+}
+.service-name{
+	display: block;
+	line-height: 20px;
+	overflow: hidden;
+	white-space: nowrap;
+	width: 84px;
+	text-overflow: ellipsis;
+}
+.service-icon{
+	display:block;
+	width:92px;
+	height:92px;
+	padding:10px 10px;
+}
+a img {outline : none;}
+a {outline : none;}
+img {border : 0;}
