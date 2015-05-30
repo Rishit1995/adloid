@@ -1,4 +1,3 @@
-
 var bestCouponFound = 0;
 var couponsArray = [];
 console.log("I'm in the page now");
@@ -211,41 +210,6 @@ function addCoupons() {
 	couponsArray = JSON.parse(getCookie("coupons"));
 	// console.log(couponsArray);
 }
-
-// function getCouponsFromCloud() {
-//
-//   console.log("getting coupons");
-//   chrome.runtime.sendMessage({message: "getCoupons"}, function(response) {
-//   	console.log(response.message);
-//   });
-//
-	// chrome.runtime.onMessage.addListener(
-	//   function(request, sender, sendResponse) {
-	//     console.log("received response");
-	//     // if (request.status == "done") {
-	//     //   // var arr = [];
-	//     //   // arr = request.coupons;
-	//     //   // addCoupons(arr);
-	// 		// 	console.log("yes status");
-	//     // }
-	//
-	// 		if (request.message == "couponsFetched") {
-	// 			sendResponse({message: "goodbye"});
-	// 			console.log(request.coupons);
-	// 			var obj = JSON.parse(request.coupons);
-	// 			console.log(obj)
-	// 			var arr = [];
-	// 			for(i=0;i<obj.coupons.length;i++) {
-	// 			  console.log(obj.coupons[i].code);
-	// 			  arr.push(obj.coupons[i].code);
-	// 			}
-	//       setCookie("coupons", JSON.stringify(arr), 1);
-	//       // setCookie("coupons", arr, 1);
-	//       addCoupons();
-	//     }
-	// });
-//
-// }
 
 function couponCheck() {
 

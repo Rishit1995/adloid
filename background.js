@@ -1,67 +1,137 @@
 Parse.initialize("TEqFhaM4HLieGdKlpL10nwcZyattYPUteRGASah5","wMwVLl2UKIcc51J1uXiayCrWTkGgGXB5DXGetX5h");
 
-Parse.Cloud.run('hello', {}, {
-	success: function(result) {
-		// result is 'Hello world!'
-		console.log(result);
-		var NotebookClass = Parse.Object.extend("Notebook");
-		var notebook = new NotebookClass();
 
-		// notebook.set("objectId",1);
-		notebook.set("numberOfCoupons",5);
-		notebook.set("coupons",["1","2","3A","4A","CBA"]);
-		notebook.set("value","1");
-		// notebook.set("id","1");
-		notebook.save(null,{
-		success:function(person){ 
-				console.log("Saved!");
-				console.log(notebook.id);
-		},
-		error:function(error){
-				console.log("Error!");
-		}
-		});
-	},
-	error: function(error) {
-		console.log(result);
-	}
-});
+// Parse.Cloud.run('hello', {}, {
+// 	success: function(result) {
+// 		// result is 'Hello world!'
+// 		console.log(result);
+// 		var NotebookClass = Parse.Object.extend("Notebook");
+// 		var notebook = new NotebookClass();
 
-// chrome.runtime.onInstalled.addListener(function(details){
-// 		if(details.reason == "install"){
-// 				// console.log("This is a first install!");
-// 				var ExtensionUser = Parse.Object.extend("extensionUser");
-// 				var extensionUser = new ExtensionUser();
-
-// 				extensionUser.save(null, {
-// 					success: function(extensionUser) {
-// 						chrome.storage.local.set({
-// 							'userID': extensionUser.id
-// 						});
-// 					},
-// 					error: function(extensionUser, error) {
-// 					}
-// 				});
+// 		// notebook.set("objectId",1);
+// 		var arr = [];
+// 		for(var i=0;i<5;i++){
+// 		  arr.push({"applyTo" : "foodpanda","id":i});
 // 		}
-// 		// On extension update
-// 		else if(details.reason == "update"){
-// 				var thisVersion = chrome.runtime.getManifest().version;
-// 				// console.log("Updated from " + details.previousVersion + " to " + thisVersion + "!");
-// 				// alert("updated");
+// 		notebook.set("coupons",arr);
+// 		notebook.set("value","1");
+// 		// notebook.set("id","1");
+// 		notebook.save(null,{
+// 		success:function(person){ 
+// 				console.log("Saved!");
+// 				console.log(notebook.id);
+// 		},
+// 		error:function(error){
+// 				console.log("Error!");
 // 		}
+// 		});
+// 	},
+// 	error: function(error) {
+// 		console.log(result);
+// 	}
 // });
 
+chrome.runtime.onInstalled.addListener(function(details){
+		if(details.reason=="install"){
+				// console.log("This is a first install!");
+				var ExtensionUserClass = Parse.Object.extend("ExtensionUser");
+				var extensionUser = new ExtensionUserClass();
+				extensionUser.set("coupons",[]);
+				extensionUser.save(null, {
+					success: function(extensionUser) {
+							chrome.storage.sync.set({
+							'userID': extensionUser.id
+							});
+					},
+					error: function(extensionUser, error){
+					}
+				});
+		}
+		else if(details.reason == "update"){
+				var thisVersion = chrome.runtime.getManifest().version;
+				// console.log("Updated from " + details.previousVersion + " to " + thisVersion + "!");
+		}
+});
 
-// // User Login
 
-// // var currentUser = Parse.User.current();
-// // if (currentUser) {
-// //     // do stuff with the user
-// //     alert("yes user");
-// // } else {
-// //     // show the signup or login page
-// //     alert("no user");
-// // }
+
+chrome.runtime.onMessage.addListener(
+	function(request,sender,sendResponse){
+	if(request.message === "UserAuth"){
+	console.log(request);
+	var NotebookClass = Parse.Object.extend("Notebook");
+	var query = new Parse.Query(NotebookClass);
+	query.equalTo("value", request.value);
+	query.find({
+		success: function(results) {
+		if(results.length > 0){
+			console.log(results[0].get("coupons"));
+			chrome.storage.sync.get("userID",function(result){
+				console.log(result);
+				var userID = result.userID;
+				var ExtensionUserClass = Parse.Object.extend("ExtensionUser");
+				var query1 = new Parse.Query(ExtensionUserClass);
+				console.log(userID);
+				query1.equalTo("objectId",userID);
+				query1.first({
+					success: function(object) {
+						console.log("success");
+						console.log(object);
+						var arr = object.get("coupons");
+						var arr1 = results[0].get("coupons");
+						console.log(arr);
+						console.log(arr1);
+						var arr2 = arr.concat(arr1);
+						console.log(arr2);
+						object.set("coupons",arr2);
+						object.save();
+						alert("Done");
+						results[0].destroy({
+							success: function(myObject) {
+						},
+						error: function(myObject, error) {
+						}
+						});
+					},
+					error: function(error) {
+							alert("Error: " + error.code + " " + error.message);
+					}
+				});
+					
+			});		  
+		}
+		else{
+			alert("This is an invalid BookID!!");
+		}
+		},
+		error: function(error) {
+		}
+	});
+	}
+	
+	
+	if(request.message === "GetCouponsFoodPanda"){
+		chrome.storage.sync.get("userID",function(result){
+			var userID = result.userID;
+			console.log(userID);
+			Parse.Cloud.run('GetCouponsFoodPanda',{"objectId": userID},{
+				success: function(result){
+					console.log(result);
+					chrome.tabs.query({active: true,currentWindow: true},function(tabs){
+						chrome.tabs.sendMessage(tabs[0].id,{message:"couponsFetched",coupons:result},function(response){
+						// console.log(response.status);
+						});
+					});
+				},
+				error: function(error) {
+					alert("failure");	
+				}
+			});
+		// sendResponse({message: "request created"});
+		});	
+	}
+
+});
 
 // chrome.runtime.onMessage.addListener(
 //  function(request, sender, sendResponse) {

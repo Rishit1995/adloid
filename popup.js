@@ -4,8 +4,8 @@ document.addEventListener('DOMContentLoaded', function () {
     for(var i = 0; i < links.length; i++) {
         (function () {
             var ln = links[i];
-            links[i].onclick = function () {
-                chrome.tabs.create({active: true, url: ln.href});
+            ln.onclick = function () {
+                  chrome.tabs.create({active: true, url: ln.href});
             };
         })();
     }
@@ -13,16 +13,19 @@ document.addEventListener('DOMContentLoaded', function () {
     //   console.log("request made");
     //   console.log(response.msg);
     // });
+    
     $('.form-signin').on('submit', function(e){
         //Prevent Default Submit Event
         e.preventDefault();
     
         // Get data from the form and put them into variables
         var data = $(this).serializeArray();
-        var email = data[0].value;
-        var password = data[1].value;
-        console.log(email);
-        console.log(password);
+        var book_id = data[0].value;
+        // console.log(book_id);
+        
+        chrome.runtime.sendMessage({message: "UserAuth",value:book_id},function(response) {
+          //console.log("userAuth request made");  
+        });
     });
 });
 
