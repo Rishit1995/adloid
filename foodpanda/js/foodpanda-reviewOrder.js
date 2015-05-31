@@ -1,36 +1,27 @@
+function setCookie(cname,cvalue,exdays) {
+	var d = new Date();
+	d.setTime(d.getTime()+(exdays*24*60*60*1000));
+	var expires = "expires="+d.toGMTString();
+	document.cookie = cname + "=" + cvalue + "; " + expires;
+}
+function getCookie(cname){
+	var name = cname + "=";
+	var ca = document.cookie.split(';');
+	for(var i=0; i<ca.length; i++) {
+		var c = ca[i].trim();
+		if (c.indexOf(name)==0) return c.substring(name.length,c.length);
+	}
+	return "";
+}
+
 var bestCouponFound = 0;
 var couponsArray = [];
-console.log("I'm in the page now");
 
-// To avoid Dominos payment
-var testRestaurant = $('.breadcrumb_pages').find('a:eq(1)').find('span').text();
-console.log(testRestaurant);
-
-// var amountPayable = parseFloat(finalTotal);
-
-// Listening to requestId from eventPage.js after the order has been posted to server.
 chrome.runtime.onMessage.addListener(
-		function(request, sender, sendResponse) {
-
-		if (request.status == "done") {
-				sendResponse({status: "got request id"});
-		}
-
-		// if (request.message == "couponsFetched") {
-		//   sendResponse({message: "goodbye"});
-		//   console.log(request.coupons);
-		//   var obj = JSON.parse(request.coupons);
-		//   console.log(obj)
-		//   var arr = [];
-		//   for(i=0;i<obj.coupons.length;i++) {
-		//     console.log(obj.coupons[i].code);
-		//     arr.push(obj.coupons[i].code);
-		//   }
-		//   setCookie("coupons", JSON.stringify(arr), 1);
-		//   // setCookie("coupons", arr, 1);
-		//   addCoupons();
-		// }
-
+	function(request, sender, sendResponse) {
+	if (request.status == "done"){
+		sendResponse({status: "got request id"});
+	}
 });
 
 // Fetching values and storing it on Parse on checkout button click
@@ -42,7 +33,7 @@ $(function(){
 		chrome.storage.local.get('area', function (items) {
 				foodpandaArea = items.area;
 		});
-
+		
 		toastr.options.timeOut = 60000;
 		toastr.info('Click on "Click to apply coupons" thumbnail.');
 
@@ -95,163 +86,133 @@ $(function(){
 		});
 });
 
-function setCookie(cname,cvalue,exdays) {
-		var d = new Date();
-		d.setTime(d.getTime()+(exdays*24*60*60*1000));
-		var expires = "expires="+d.toGMTString();
-		document.cookie = cname + "=" + cvalue + "; " + expires;
-}
 
-function getCookie(cname) {
-	var name = cname + "=";
-	var ca = document.cookie.split(';');
-	// console.log(ca);
-	for(var i=0; i<ca.length; i++) {
-		var c = ca[i].trim();
-		if (c.indexOf(name)==0) return c.substring(name.length,c.length);
-	}
-	return "";
-}
-
-function checkSavings(coupons) {
-	// alert("checkSavings");
-	totLen = $(".voucher").find(".title").length;
-	// console.log(totLen);
+function calculateSavings(coupons) {
+	var len = $(".voucher").find(".title").length;
 	savings = 0;
-	console.log("checkSavings totlen "+ totLen );
-	if($(".voucher").find(".title").find(".voucher-applied, p").length > 0) {
+	if($(".voucher").find(".title").find(".voucher-applied, p").length > 0){
 		savings=$(".price").find(".price-wrapper").text().trim().split("Rs.")[1].trim();
-		console.log(savings);
 		savings=parseFloat(savings);
-		console.log("checkSavings savings "+ savings );
+		console.log("calculateSavings savings:"+ savings);
 	}
-	else
-	{
+	else{
 		savings = 0;
 	}
-	if(savings>getCookie("perSaving")){
-			setCookie("perSaving", savings, 1);
+	if(savings>getCookie("maxSaving")){
+			setCookie("maxSaving", savings, 1);
 	}
 
-	varName = "savingsFood" + getCookie("doneTill");
-	setCookie(varName, savings, 1);
-	setCookie("doneTill", parseFloat(getCookie("doneTill")) + 1 , 1);
+	varName = "savingsFood" + getCookie("appliedTill");
+	setCookie(varName,savings,1);
+	setCookie("appliedTill",parseFloat(getCookie("appliedTill"))+1,1);
 	applyCoupons(coupons);
 }
 
-function preProcessor(i, coupon){
-	// console.log("I got " + i + " " + coupon);
-	// alert(coupon);
+function preProcessor(coupon){
 	$('#voucher-success').removeClass("hide");
 	$('#voucher-error').removeClass("hide");
 	$('#shop_order_cart_type_vouchers').val(coupon);
 	document.getElementById('shop_order_cart_type_voucher_button').click();
-	// console.log("Coupon Code applied " + coupon);
-
-	// setTimeout(function(){changeFlag(i, coupon);},1000);
 }
-
-function finalApply(i, finalCoupon) {
-		preProcessor(i, finalCoupon);
+function finalApply(finalCoupon) {
+		preProcessor(finalCoupon);
 }
-
+function sortFunction(a,b){
+	return a.coupon - b.coupon;
+}
+function applyNextCoupon(){
+	console.log("Apply next coupon");
+	setCookie("couponsApplied",parseFloat(getCookie("couponsApplied"))+1,1);
+	var n = getCookie("couponsApplied");
+	var arr =  JSON.parse(getCookie("sortedCoupons"));
+	if(arr.length > n){
+		finalApply(arr[n]["coupon"]);
+	}
+	else{
+		alert("No coupons found!");
+	}
+}
 function endProcess(coupons) {
-		alert("endProcess");
-		max = -111111;
-		ind_req = 1000;
+		alert("Final Process");
+		var couponsWithSavings = [];
 		for(i=0;i<coupons.length;i++) {
-				varName = "savingsFood" + i;
-				curSaving = getCookie(varName);
-				curSaving = parseFloat(curSaving);
-				alert("Saving "+curSaving);
-				if(max < curSaving) {
-						max = curSaving;
-						ind_req = i;
-				}
-				setCookie(varName,0,-1);
+			varName = "savingsFood" + i;
+			curSaving = getCookie(varName);
+			curSaving = parseFloat(curSaving);
+			if(curSaving>0){
+				couponsWithSavings.push({});
+				couponsWithSavings[i]["savings"] = curSaving;
+				couponsWithSavings[i]["coupon"] = couponsArray[i];
+			}
+			setCookie(varName,0,-1);
 		}
-
-		if(max>0) {
-				bestCouponFound = 1;
-				coup_req = coupons[ind_req];
-				setCookie("doneTill", 0, 1);
-				setCookie("coupInProgress", 0, 1);
-				alert("Final Coupon"+coup_req);
-				finalApply(ind_req, coup_req);
+		couponsWithSavings.sort(sortFunction);
+		if(couponsWithSavings.length>0){
+			bestCouponFound = 1;
+			coup_req = couponsWithSavings[0]["coupon"];
+			setCookie("appliedTill", 0,1);
+			setCookie("applyingCoupons", 0,1);
+			setCookie("couponApplied",0,1);
+			setCookie("sortedCoupons",JSON.stringify(couponsWithSavings),1);
+			alert("Final Coupon : "+coup_req);
+			finalApply(coup_req);
+		}
+		else{
+			setCookie("couponApplied",-1,1);
+			setCookie("sortedCoupons",JSON.stringify(couponsWithSavings),1);
+			alert("No coupons found!");
 		}
 }
-
 function applyCoupons(coupons){
-		var savings = [];
-		var start = parseFloat(getCookie("doneTill"));
-		console.log("In the apply coupons:" + start + "  " +coupons.length);
-		if(start==""){
-				start=0;
-		}
-		if(start==coupons.length){
-				endProcess(coupons);
-		}
-		else if(start<coupons.length && bestCouponFound==0){
-			// alert("appling coupon " + coupons[start]);
-			preProcessor(start,coupons[start]);
-		}
+	var savings = [];
+	var start = parseFloat(getCookie("appliedTill"));
+	console.log("Coupons no:" + start + " ; Coupons length:" +coupons.length);
+	if(start==""){
+		start=0;
+	}
+	if(start==coupons.length){
+		endProcess(coupons);
+	}
+	else if(start<coupons.length && bestCouponFound==0){
+		preProcessor(coupons[start]);
+	}
 }
-
-function getCoupons(coupons){
+function startApplyCoupons(coupons){
 	bestCouponFound = 0;
-	setCookie("coupInProgress", 1, 1);
-	setCookie("doneTill", 0, 1);
-	setCookie("perSaving", 0, 1);
+	setCookie("applyingCoupons", 1, 1);
+	setCookie("appliedTill", 0, 1);
+	setCookie("maxSaving", 0, 1);
 	applyCoupons(coupons);
 }
-
-function addCoupons() {
-	// console.log("coupons received");
+function couponCheck(){
+	console.log("coupons checks");
 	couponsArray = JSON.parse(getCookie("coupons"));
-	// console.log(couponsArray);
-}
-
-function couponCheck() {
-
-	// getCouponsFromCloud();
-	addCoupons();
-	var coupStatus = getCookie("coupInProgress");
-	if(coupStatus==""){
-		setCookie("coupInProgress", 0, 1);
-		// console.log("in coupStatus=0");
-		// getCouponsFromCloud();
+	console.log(couponsArray);
+	console.log(couponsArray.length);
+	var couponApplyingStatus = getCookie("applyingCoupons");
+	if(couponApplyingStatus==""){
+		setCookie("applyingCoupons", 0, 1);
 	}
-	else if(coupStatus==1){
-		// addToDOM();
-		// addCoupons();
-		checkSavings(couponsArray);
+	else if(couponApplyingStatus==1){
+		calculateSavings(couponsArray);
 	}
 	var imgURL = chrome.extension.getURL("apply-coupons-icon.png");
-	// console.log(imgURL);
-
+	var imgURL1 = chrome.extension.getURL("next.png");
+	console.log(imgURL);
+	console.log(imgURL1);
 	if($('#shop_order_cart_type_vouchers').length>0){
-		$('.voucher-input-container').after("<a id='couponClick' href='javascript:void();'><img style='margin-top:15px;margin-left:70px;' src='" + imgURL + "'></a>");
-		// addToDOM();
+		$('.voucher-input-container').after("<a id='nextClick' href='javascript:void();'><img style='margin-top:15px;margin-left:70px;height:120px;width:120px;' src='" + imgURL1 + "'></a>");
+		$('.voucher-input-container').after("<a id='couponClick' href='javascript:void();'><img style='margin-top:15px;margin-left:10px;height:100px;width:100px;' src='" + imgURL + "'></a>");
+		
 		var button = document.getElementById("couponClick");
-		button.addEventListener("click", function(){
-			getCoupons(couponsArray);
-		}, false);
+		var nextButton = document.getElementById("nextClick");
+		
+		button.addEventListener("click",function(){startApplyCoupons(couponsArray);},false);
+		nextButton.addEventListener("click",function(){
+			console.log("Next button clicked");
+			applyNextCoupon();
+		},false);
 	}
 }
 
-
-
-if(testRestaurant.indexOf("Domino's") > -1 || testRestaurant.indexOf("Pizza hut") > -1 || testRestaurant.indexOf("Mast") > -1) {
-		// We don't accept payments for that
-}
-else {
-		couponCheck();
-		// UI elements
-		// var $button = $('<input type="button" id="brthePay" class="btn-brthe btn-primary-brthe btn-checkout-brthe" value="Use PayTM wallet to get it for: Rs.'+payable+'" /></br></br></br>');
-		// var $message1 = $('<div class="mess" ><span id="message1" class="message">* PayUMoney discount already applied</span></br><span id="message2" class="message">* Extra 20 Off using Brthe</span></div>');
-		// var $message2 = $('<span id="message2" class="message">*Extra 20 Off using Brthe</span></div>);
-		// var $line = $('</br></br></br>');
-
-		// $('.checkout-review-order').after($message1);
-		// $('.checkout-review-order').after($button);
-}
+couponCheck();

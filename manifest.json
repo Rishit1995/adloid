@@ -14,7 +14,8 @@
     "128": "img/icons/128x128.png" },
   
   "web_accessible_resources": [
-    "apply-coupons-icon.png"
+    "apply-coupons-icon.png",
+    "next.png"
   ],
   
   "browser_action": {

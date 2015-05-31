@@ -4,6 +4,15 @@ function setCookie(cname,cvalue,exdays) {
     var expires = "expires="+d.toGMTString();
     document.cookie = cname + "=" + cvalue + "; " + expires;
 }
+function getCookie(cname){
+  var name = cname + "=";
+  var ca = document.cookie.split(';');
+  for(var i=0; i<ca.length; i++) {
+    var c = ca[i].trim();
+    if (c.indexOf(name)==0) return c.substring(name.length,c.length);
+  }
+  return "";
+}
 
 // Extracting Area from the webpage
 function getArea() {
@@ -30,7 +39,11 @@ function getCouponsFromCloud() {
   		if(request.message == "couponsFetched"){
     		sendResponse({message: "goodbye"});
     		console.log("Coupons" + request.coupons);
-        setCookie("coupons",request.coupons,1);
+        setCookie("coupons",JSON.stringify(request.coupons),1);
+        console.log(JSON.stringify(request.coupons));
+        var a = getCookie("coupons");
+        console.log(JSON.parse(a));
+        console.log(JSON.parse(a).length);
       }
   });
 }
