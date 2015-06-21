@@ -1,0 +1,37 @@
+.clearfix{
+padding: 0px 3px;
+}
+.notifyjs-buttonNotify-base {
+  opacity: 0.85;
+  width: 300px;
+  background: #009999;
+  padding: 5px;
+  border-radius: 10px;
+  color : #ffffff
+}
+
+.notifyjs-buttonNotify-base .title {
+  height : 60px;
+  width: 200px;
+  float: left;
+  margin: 10px 0 0 10px;
+  padding-top : 20px;
+  font-size : 110%;
+  text-align: right;
+}
+
+.notifyjs-buttonNotify-base .buttons {
+  color : #000000;
+  width: 70px;
+  float: right;
+  font-size: 9px;
+  padding: 5px 5px;
+  margin: 2px;
+}
+
+.notifyjs-buttonNotify-base button {
+  font-size: 14px;
+  padding: 5px;
+  margin: 2px;
+  width: 70px;
+}

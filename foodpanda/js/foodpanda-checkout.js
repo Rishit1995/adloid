@@ -1,6 +1,6 @@
 $(function(){
-  toastr.options.timeOut = 60000;
-  toastr.info("Select 'Pay Online' as payment option.");
+  // toastr.options.timeOut = 60000;
+  // toastr.info("Select 'Pay Online' as payment option.");
 
   // Submit user details to Cloud
   $('#shop_checkout_type_place_order_button').on('click', function() {
@@ -14,7 +14,6 @@ $(function(){
     var addressLine1 = $('#shop_checkout_type_orderMetaData_customerAddress_addressLine1').val();
     var addressLine2 = $('#shop_checkout_type_orderMetaData_customerAddress_addressLine2').val();
 
-
     data["firstName"] = firstName;
     data["lastName"] = lastName;
     data["email"] = email;
@@ -23,7 +22,7 @@ $(function(){
     data["addressLine2"] = addressLine2;
 
     // Sending message to the eventPage.js to store the order
-    chrome.runtime.sendMessage({message: "postUserDetails", data: data}, function(response) {
+    chrome.runtime.sendMessage({message: "PostUserDetails", data: data}, function(response) {
         // console.log(response.done);
     });
 

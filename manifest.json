@@ -1,62 +1,43 @@
 {
-  "manifest_version": 2,
-
-  "name": "Banana ",
-  "short_name": "Banana",
-  "description": "Best coupon for you!",
-  "version": "1.0.0",
-
-  "icons": {
-    "16": "img/icons/16x16.png",
-    "36": "img/icons/36x36.png",
-    "48": "img/icons/48x48.png",
-    "96": "img/icons/96x96.png",
-    "128": "img/icons/128x128.png" },
-  
-  "web_accessible_resources": [
-    "apply-coupons-icon.png",
-    "next.png"
-  ],
-  
-  "browser_action": {
-    "default_icon": "img/icons/16x16.png",
-    "default_popup": "popup.html",
-    "default_title":  "Banana"
-  },
-
-  "background": {
-    "scripts": ["extra/jquery-1.11.2.min.js","extra/parse-1.3.4.min.js", "background.js"],
-    "persistent": false
-  },
-  "content_scripts": [
-    {
-      "matches": ["https://secure.payu.in/*"],
-      "css": ["extra/toastr.min.css", "foodpanda/css/foodpanda.css"],
-      "js": ["extra/jquery-1.11.2.min.js", "extra/toastr.min.js", "payumoney/js/payu.js"]
-    },
-    {
-      "matches": ["https://www.payumoney.com/payments/*"],
-      "css": ["extra/toastr.min.css", "foodpanda/css/foodpanda.css"],
-      "js": ["extra/jquery-1.11.2.min.js", "extra/toastr.min.js", "payumoney/js/payumoney.js"]
-    },
-    {
-      "matches": ["https://www.foodpanda.in/checkout/*"],
-      "css": ["extra/toastr.min.css", "foodpanda/css/foodpanda.css"],
-      "js": ["extra/jquery-1.11.2.min.js", "extra/toastr.min.js", "foodpanda/js/foodpanda-checkout.js"]
-    },
-    {
-      "matches": ["https://www.foodpanda.in/review-order/*"],
-      "css": ["extra/toastr.min.css", "foodpanda/css/foodpanda.css"],
-      "js": ["extra/jquery-1.11.2.min.js", "extra/toastr.min.js", "foodpanda/js/foodpanda-reviewOrder.js"]
-    },
-    {
-      "matches": ["https://www.foodpanda.in/restaurants"],
-      "js": ["extra/jquery-1.11.2.min.js", "foodpanda/js/foodpandaGetArea.js"]
-    }
-  ],
-  "permissions": [
-    "activeTab",
-    "storage",
-    "tabs"
-  ]
+   "background": {
+      "persistent": false,
+      "scripts": [ "extra/jquery-1.11.2.min.js", "extra/parse-1.3.4.min.js", "background.js" ]
+   },
+   "browser_action": {
+      "default_icon": "img/icons/16.png",
+      "default_popup": "popup.html",
+      "default_title": "Adloid"
+   },
+   "content_scripts": [ {
+      "css": [  ],
+      "js": [ "extra/jquery-1.11.2.min.js" ],
+      "matches": [ "http://*/*", "https://*/*" ]
+   }, {
+      "css": [ "extra/toastr.min.css", "extra/notify.css", "foodpanda/css/foodpanda.css" ],
+      "js": [ "extra/jquery-1.11.2.min.js", "extra/toastr.min.js", "extra/notify-combined.js", "foodpanda/js/foodpanda-checkout.js" ],
+      "matches": [ "https://www.foodpanda.in/checkout/*" ]
+   }, {
+      "css": [ "extra/toastr.min.css", "extra/notify.css", "foodpanda/css/foodpanda.css" ],
+      "js": [ "extra/jquery-1.11.2.min.js", "extra/toastr.min.js", "extra/notify-combined.js", "foodpanda/js/foodpanda-reviewOrder.js" ],
+      "matches": [ "https://www.foodpanda.in/review-order/*" ]
+   }, {
+      "js": [ "extra/jquery-1.11.2.min.js", "foodpanda/js/foodpandaGetArea.js" ],
+      "matches": [ "https://www.foodpanda.in/restaurant/*" ]
+   } ],
+   "description": "Use Adloid to save both Time & Money!!",
+   "icons": {
+      "128": "img/icons/128.png",
+      "16": "img/icons/16.png",
+      "36": "img/icons/36.png",
+      "48": "img/icons/48.png",
+      "96": "img/icons/96.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiNUR+hBuHnX3kCDm6t2P0SSIj9cPzHd4rpD7xy3uhFM961MRbTK0sx2+hGdyu97Ey3vCEeC1CjOm70V/tVs5Ky+bd0eWTkCKpurMMREoPIwTJ7oVVNGnOyIupr+VDkPbZdKd8Sfa0dwcNiQ0DuRzu2yCsHoEcGcsaNIyeVmLso9YhQg87AENG2S5pZwPb1Lrq2Hb+mMVm1JxX/pszZb/syGpXdl9RSqaVJbQH/1HvxODnOaStF/fLi/2Q4y/psu7NzlVIcd0Gg5UO9Yudb8Z81oLCwOw5oJ9LJwF7OjGVsGxykKTYzPKTpWVwrVOpZ1Gzt+a42Mdro645UH19vIeMwIDAQAB",
+   "manifest_version": 2,
+   "name": "Adloid ",
+   "permissions": [ "activeTab", "storage", "tabs" ],
+   "short_name": "Adloid",
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "1.0.1",
+   "web_accessible_resources": [  ]
 }

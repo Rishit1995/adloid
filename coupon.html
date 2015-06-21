@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Bootstrap 101 Template</title>
+
+    <!-- Bootstrap -->
+    <link href="extra/bootstrap.min.css" rel="stylesheet">
+    <link href="extra/notify.css" rel="stylesheet">
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="extra/jquery-1.11.2.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="extra/bootstrap.min.js"></script>
+    <script src="extra/notify-combined.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+
+    <div class="container">
+
+      <form class="form-signin">
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <label for="inputPassword" class="sr-only">Enter PIN</label>
+        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" value="remember-me"> Remember me
+          </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+      </form>
+
+    </div> <!-- /container -->
+
+    <script type="text/javascript">
+
+    // Code to define style for notification - should be called only once
+    $(document).ready(function() {
+      $.notify.addStyle('buttonNotify', {
+        html: 
+          "<div>" +
+            "<div class='clearfix'>" +
+              "<div class='title' data-notify-html='title'/>" +
+              "<div class='buttons'>" +
+                "<button class='yes' data-notify-text='button'></button>" +
+                "<button class='no'>Cancel</button>" +
+              "</div>" +
+            "</div>" +
+          "</div>"
+        });
+
+
+    // Code to actually show notification
+    $.notify({
+      title: 'Click to apply best coupon',
+      button: 'Apply'
+    }, { 
+      style: 'buttonNotify',
+      autoHide: false,
+      clickToHide: false
+    });
+    // Handlers
+    $(document).on('click', '.notifyjs-buttonNotify-base .no', function() {
+        //programmatically trigger propogating hide event
+        $(this).trigger('notify-hide');
+        });
+    $(document).on('click', '.notifyjs-buttonNotify-base .yes', function() {
+        //show button text
+        alert($(this).text() + " clicked!");
+          //hide notification
+          $(this).trigger('notify-hide');
+        });
+    });
+    </script>
+  </body>
+</html>

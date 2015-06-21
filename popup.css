@@ -5,7 +5,6 @@ body{
   font-size: 13px;
   color: #545454;
   background-color: #ffffff;
-  /*background-color: #f8f6f2;*/
 }
 header {
 	height: 52px;
@@ -21,7 +20,7 @@ header {
 }
 footer {
 	cursor: pointer;
-	padding: 20px 55px;
+	padding: 10px 55px;
 	border-top: 1px solid #e1ddd8;
 	background-color:#010638;
 }
@@ -29,33 +28,9 @@ footer {
 	position: relative;
 	padding:0px 10px;
 }
-#wrapper{
-	display:block;
-	padding:20px 0px;
-	margin-top:20px;
-}
-.service{
-	display:block;
-	border: 1px solid #FFF;
-	border-radius: 2px;
-	display: inline-block;
-	text-align:center;
-	height: 108px;
-	/*width: 108px;*/
-}
-.service-name{
-	display: block;
-	line-height: 20px;
-	overflow: hidden;
-	white-space: nowrap;
-	width: 84px;
-	text-overflow: ellipsis;
-}
-.service-icon{
-	display:block;
-	width:92px;
-	height:92px;
-	padding:10px 10px;
+#link{
+	outline:none;
+	float:right;
 }
 a img {outline : none;}
 a {outline : none;}

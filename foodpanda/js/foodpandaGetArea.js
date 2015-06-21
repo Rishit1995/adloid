@@ -19,7 +19,6 @@ function getArea() {
 	var data = {};
   var area = $('title').text();
   data["area"] = $.trim(area);
-	data["source"] = "foodpandaGetArea";
 	chrome.storage.local.set({
 		'area': data["area"]
 	});
@@ -28,22 +27,18 @@ function getArea() {
 
 // Requesting the Eventpage to get Coupons from the Cloud
 function getCouponsFromCloud() {
-  // console.log("getting coupons");
   chrome.runtime.sendMessage({message: "GetCouponsFoodPanda"}, function(response){
-  	// console.log(response.message);
   });
 
 	chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse){
-      // console.log("received response");
   		if(request.message == "couponsFetched"){
-    		sendResponse({message: "goodbye"});
-    		console.log("Coupons" + request.coupons);
-        setCookie("coupons",JSON.stringify(request.coupons),1);
-        console.log(JSON.stringify(request.coupons));
-        var a = getCookie("coupons");
-        console.log(JSON.parse(a));
-        console.log(JSON.parse(a).length);
+        console.log("Coupons : ");
+        console.dir(request.coupons);
+        chrome.storage.local.set({
+          'coupons':request.coupons,
+          'done': 0
+        })
       }
   });
 }
