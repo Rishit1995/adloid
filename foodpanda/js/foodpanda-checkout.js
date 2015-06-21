@@ -1,7 +1,21 @@
 $(function(){
-  // toastr.options.timeOut = 60000;
-  // toastr.info("Select 'Pay Online' as payment option.");
-
+  chrome.storage.local.get(null,function(items){
+    if(items.done==0){
+      $.notify("You may use Adloid to apply coupon!","info");
+    }
+    else
+    {
+      if(items.coupon===""){
+        $.notify("No coupons applicable!","info");
+      }
+      else{
+        $.notify("Coupon : "+items.coupon.id,"success");
+        if(typeof items.coupon.note != "undefined"){
+          $.notify("Note : "+items.coupon.note,"info");
+        }
+      }
+    }
+  });
   // Submit user details to Cloud
   $('#shop_checkout_type_place_order_button').on('click', function() {
     var data = {};

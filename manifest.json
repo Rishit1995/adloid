@@ -9,19 +9,20 @@
       "default_title": "Adloid"
    },
    "content_scripts": [ {
-      "css": [  ],
-      "js": [ "extra/jquery-1.11.2.min.js" ],
+      "css": [ "extra/notify.css" ],
+      "js": [ "extra/jquery-1.11.2.min.js","extra/notify-combined.js"],
       "matches": [ "http://*/*", "https://*/*" ]
    }, {
-      "css": [ "extra/toastr.min.css", "extra/notify.css", "foodpanda/css/foodpanda.css" ],
-      "js": [ "extra/jquery-1.11.2.min.js", "extra/toastr.min.js", "extra/notify-combined.js", "foodpanda/js/foodpanda-checkout.js" ],
+      "css": [ "extra/notify.css","foodpanda/css/foodpanda.css" ],
+      "js": [ "extra/jquery-1.11.2.min.js","extra/notify-combined.js", "foodpanda/js/foodpanda-checkout.js" ],
       "matches": [ "https://www.foodpanda.in/checkout/*" ]
    }, {
-      "css": [ "extra/toastr.min.css", "extra/notify.css", "foodpanda/css/foodpanda.css" ],
-      "js": [ "extra/jquery-1.11.2.min.js", "extra/toastr.min.js", "extra/notify-combined.js", "foodpanda/js/foodpanda-reviewOrder.js" ],
+      "css": [ "extra/notify.css", "foodpanda/css/foodpanda.css" ],
+      "js": [ "extra/jquery-1.11.2.min.js", "extra/notify-combined.js", "foodpanda/js/foodpanda-reviewOrder.js" ],
       "matches": [ "https://www.foodpanda.in/review-order/*" ]
    }, {
-      "js": [ "extra/jquery-1.11.2.min.js", "foodpanda/js/foodpandaGetArea.js" ],
+      "css": [ "extra/notify.css" ],
+      "js": [ "extra/jquery-1.11.2.min.js", "extra/notify-combined.js", "foodpanda/js/foodpandaGetArea.js" ],
       "matches": [ "https://www.foodpanda.in/restaurant/*" ]
    } ],
    "description": "Use Adloid to save both Time & Money!!",
@@ -35,7 +36,7 @@
    "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiNUR+hBuHnX3kCDm6t2P0SSIj9cPzHd4rpD7xy3uhFM961MRbTK0sx2+hGdyu97Ey3vCEeC1CjOm70V/tVs5Ky+bd0eWTkCKpurMMREoPIwTJ7oVVNGnOyIupr+VDkPbZdKd8Sfa0dwcNiQ0DuRzu2yCsHoEcGcsaNIyeVmLso9YhQg87AENG2S5pZwPb1Lrq2Hb+mMVm1JxX/pszZb/syGpXdl9RSqaVJbQH/1HvxODnOaStF/fLi/2Q4y/psu7NzlVIcd0Gg5UO9Yudb8Z81oLCwOw5oJ9LJwF7OjGVsGxykKTYzPKTpWVwrVOpZ1Gzt+a42Mdro645UH19vIeMwIDAQAB",
    "manifest_version": 2,
    "name": "Adloid ",
-   "permissions": [ "activeTab", "storage", "tabs" ],
+   "permissions": [ "notifications","activeTab","storage","tabs" ],
    "short_name": "Adloid",
    "update_url": "https://clients2.google.com/service/update2/crx",
    "version": "1.0.1",

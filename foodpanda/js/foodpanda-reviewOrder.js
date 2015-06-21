@@ -44,6 +44,9 @@ $(function(){
 			data["coupon"]     = coupon;
 			data["comment"]    = comment;
 			data["finalTotal"] = finalTotal;
+			if(coupon===""){
+				chrome.storage.local.set({"coupon":""});
+			}
 			console.log(data);
 			var order = [];
 			// Getting order
@@ -95,15 +98,15 @@ function calculateSavings(coupons) {
 	applyCoupons(coupons);
 }
 function preProcessor(coupon){
-	console.log(coupon);
-	console.log("ID of coupon"+ coupon.id);
-	setCookie("note",coupon.note,1);
+	
 	$('#voucher-success').removeClass("hide");
 	$('#voucher-error').removeClass("hide");
 	$('#shop_order_cart_type_vouchers').val(coupon.id);
 	document.getElementById('shop_order_cart_type_voucher_button').click();
 }
 function finalApply(finalCoupon){
+	console.log(finalCoupon);
+	chrome.storage.local.set({"coupon":finalCoupon});
 	preProcessor(finalCoupon);
 }
 function applyNextCoupon(){
@@ -121,7 +124,7 @@ function applyNextCoupon(){
 		finalApply(arr[n]["coupon"]);
 	}
 	else{
-		alert("No coupons found!");
+		chrome.storage.local.set({"coupon":""});
 	}
 }
 function sortFunction(a,b){
@@ -186,7 +189,7 @@ function startApplyCoupons(coupons){
 }
 function note(){
 	$(document).ready(function(){
-	$.notify.addStyle('buttonNotify', {
+	$.notify.addStyle('buttonNotify',{
 		html: 
 		  "<div>" +
 			"<div class='clearfix'>" +
@@ -199,13 +202,27 @@ function note(){
 		  "</div>"
 		});
 	var status=0;
-	chrome.storage.local.get('done', function (items) {
+	chrome.storage.local.get(null, function (items) {
+		console.log(items);
 		status = items.done;
-		console.log(status);
-		var str="Click to apply best coupon.";
+		var str;
+		var coupon = getCookie("couponID");
 		var note = getCookie("note");
-		if(status==1)
-		str="Click to apply next best coupon."+note;
+		if(status==1){
+			str="Click to apply next best coupon.";
+			if(items.coupon===""){
+				$.notify("No coupons applicable!",info);
+			}
+			else{
+				$.notify("Coupon : "+items.coupon.id,"success");
+				if(typeof items.coupon.note != "undefined"){
+					$.notify("Note : "+items.coupon.note,"info");
+				}
+			}
+		}
+		else{
+			str="Click to apply best coupon.";
+		}
 		$.notify({
 		  title: str,
 		  button: 'Apply'

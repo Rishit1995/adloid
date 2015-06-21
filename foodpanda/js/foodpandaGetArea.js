@@ -26,7 +26,7 @@ function getArea() {
 }
 
 // Requesting the Eventpage to get Coupons from the Cloud
-function getCouponsFromCloud() {
+function getCouponsFromCloud(){
   chrome.runtime.sendMessage({message: "GetCouponsFoodPanda"}, function(response){
   });
 
