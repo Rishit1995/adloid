@@ -1,17 +1,17 @@
 $(function(){
   chrome.storage.local.get(null,function(items){
     if(items.done==0){
-      $.notify("You may use Adloid to apply coupon!","info");
+      $.notify("You may use Adloid to apply coupon!",{className:'info',autoHide:false,clickToHide:false});
     }
     else
     {
       if(items.coupon===""){
-        $.notify("No coupons applicable!","info");
+        $.notify("No coupons applicable!",{className:'error',autoHide:false,clickToHide:false});
       }
       else{
-        $.notify("Coupon : "+items.coupon.id,"success");
+        $.notify("Coupon : "+items.coupon.id,{className:'success',autoHide:false,clickToHide:false});
         if(typeof items.coupon.note != "undefined"){
-          $.notify("Note : "+items.coupon.note,"info");
+          $.notify("Note : "+items.coupon.note,{className:'info',autoHide:false,clickToHide:false});
         }
       }
     }

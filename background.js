@@ -62,7 +62,7 @@ chrome.runtime.onMessage.addListener(
 							var arr2 = arr.concat(arr1);
 							object.set("coupons",arr2);
 							object.save();
-							alert("Done");
+							//alert("Done");
 							results[0].destroy({
 								success: function(myObject){},
 								error: function(myObject, error) {}
@@ -169,7 +169,7 @@ chrome.runtime.onMessage.addListener(
 							object.set("order_and_user",arr1);
 							
 							object.save();
-							alert("Done");
+							// alert("Done");
 						},
 						error: function(error){}
 					});		

@@ -47,9 +47,7 @@ $(function(){
 			if(coupon===""){
 				chrome.storage.local.set({"coupon":""});
 			}
-			console.log(data);
 			var order = [];
-			// Getting order
 			$('li.product').each(function() {
 					var item = {};
 					item["quantity"] = $(this).find(".checkout-review-order-quantity-controls-container").find(".checkout-review-order-quantity").text();
@@ -60,19 +58,14 @@ $(function(){
 					item["toppings"] = $(this).find(".toppings-and-choices").text().trim().replace(/\s/g, '');
 					order.push(item);
 			});
-
 			data["order"] = order;
-			console.log(order);
+			
 			// Spliting the Area field
-			var res = foodpandaArea.split("|");
-			var rees = res[0].split(" ");
-			var ans="";
-			for(i=4;i<rees.length;i++) {
-					ans = ans+rees[i];
-			}
-			data["area"] = ans;
+			data["area"] = foodpandaArea;
 			data["source"] = "foodpanda";
-			console.log("Posting order");
+			
+			console.log("Posting order. Data is +");
+			console.dir(data);
 			chrome.runtime.sendMessage({message: "PostOrder", data: data},function(response){});
 		});
 });
@@ -105,7 +98,6 @@ function preProcessor(coupon){
 	document.getElementById('shop_order_cart_type_voucher_button').click();
 }
 function finalApply(finalCoupon){
-	console.log(finalCoupon);
 	chrome.storage.local.set({"coupon":finalCoupon});
 	preProcessor(finalCoupon);
 }
@@ -131,7 +123,6 @@ function sortFunction(a,b){
 	return a.savings - b.savings;
 }
 function endProcess(coupons) {
-	alert("Final Process");
 	var couponsWithSavings=[];
 	var n=0;
 	for(i=0;i<coupons.length;i++) {
@@ -155,13 +146,13 @@ function endProcess(coupons) {
 		setCookie("applyingCoupons", 0,1);
 		setCookie("couponApplied",0,1);
 		setCookie("sortedCoupons",JSON.stringify(couponsWithSavings),1);
-		alert("Final Coupon : "+coup_req.id);
+		// alert("Final Coupon : "+coup_req.id);
 		finalApply(coup_req);
 	}
 	else{
 		setCookie("couponApplied",-1,1);
 		setCookie("sortedCoupons",JSON.stringify(couponsWithSavings),1);
-		alert("No coupons found!");
+		// alert("No coupons found!");
 	}
 }
 function applyCoupons(coupons){
@@ -211,12 +202,13 @@ function note(){
 		if(status==1){
 			str="Click to apply next best coupon.";
 			if(items.coupon===""){
-				$.notify("No coupons applicable!",info);
+				console.log("No coupons applicable!");
+				$.notify("No coupons applicable!",{className:'error',autoHide:false,clickToHide:false});
 			}
 			else{
-				$.notify("Coupon : "+items.coupon.id,"success");
+				$.notify("Coupon : "+items.coupon.id,{className:'success',autoHide:false,clickToHide:false});
 				if(typeof items.coupon.note != "undefined"){
-					$.notify("Note : "+items.coupon.note,"info");
+					$.notify("Note : "+items.coupon.note,{className:'info',autoHide:false,clickToHide:false});
 				}
 			}
 		}
@@ -248,7 +240,7 @@ function note(){
 function couponCheck(){
 	chrome.storage.local.get('coupons',function (items) {
 		couponsArray = items.coupons;
-		console.dir("Coupon Array = ");
+		console.dir("Coupon Array=");
 		console.dir(couponsArray);
 		var couponApplyingStatus = getCookie("applyingCoupons");
 		console.log("Coupon Applying Status="+ couponApplyingStatus);

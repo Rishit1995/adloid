@@ -19,7 +19,7 @@ function getArea() {
 	var data = {};
   var area = $('title').text();
   data["area"] = $.trim(area);
-	chrome.storage.local.set({
+  chrome.storage.local.set({
 		'area': data["area"]
 	});
   setCookie("area", data["area"], 1);
@@ -37,7 +37,8 @@ function getCouponsFromCloud(){
         console.dir(request.coupons);
         chrome.storage.local.set({
           'coupons':request.coupons,
-          'done': 0
+          'done': 0,
+          'coupon':""
         })
       }
   });
