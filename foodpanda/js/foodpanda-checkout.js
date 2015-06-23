@@ -1,17 +1,17 @@
 $(function(){
   chrome.storage.local.get(null,function(items){
     if(items.done==0){
-      $.notify("You may use Adloid to apply coupon!",{className:'info',autoHide:false,clickToHide:false});
+      $.notify("You may use Adloid to apply coupon!",{className:'info',autoHide:false,clickToHide:true});
     }
     else
     {
       if(items.coupon===""){
-        $.notify("No coupons applicable!",{className:'error',autoHide:false,clickToHide:false});
+        $.notify("No coupons applicable!",{className:'error',autoHide:false,clickToHide:true});
       }
       else{
-        $.notify("Coupon : "+items.coupon.id+" & You saved : Rs  "+items.saving,{className:'success',autoHide:false,clickToHide:false});
+        $.notify("Coupon : "+items.coupon.id+" & You saved : Rs  "+items.saving,{className:'success',autoHide:false,clickToHide:true});
         if(typeof items.coupon.note != "undefined"){
-          $.notify("Note : "+items.coupon.note,{className:'info',autoHide:false,clickToHide:false});
+          $.notify("Note : "+items.coupon.note,{className:'info',autoHide:false,clickToHide:true});
         }
       }
     }
@@ -19,7 +19,7 @@ $(function(){
   // Submit user details to Cloud
   $('#shop_checkout_type_place_order_button').on('click', function() {
     var data = {};
-    console.log("Yes buttons is clicked");
+    //console.log("Yes buttons is clicked");
     var firstName = $('#shop_checkout_type_orderMetaData_customer_firstName').val();
     var lastName =  $('#shop_checkout_type_orderMetaData_customer_lastName').val();
     var email = $('#shop_checkout_type_orderMetaData_customer_email').val();

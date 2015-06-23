@@ -31,7 +31,7 @@ $(function(){
 				foodpandaArea = items.area;
 		});
 		$('#shop_order_cart_type_checkout_secondary_button, #shop_order_cart_type_checkout_primary_button').on('click', function(){
-			console.log("checkout clicked");
+			//console.log("checkout clicked");
 			var data = {};
 			var restaurant = $('.vendor-title').text();
 			var delivery = $('#shop_order_cart_type_expeditionType_0').prop('checked');
@@ -65,8 +65,8 @@ $(function(){
 			data["area"] = foodpandaArea;
 			data["source"] = "foodpanda";
 			
-			console.log("Posting order. Data is +");
-			console.dir(data);
+			//console.log("Posting order. Data is +");
+			//console.dir(data);
 			chrome.runtime.sendMessage({message: "PostOrder", data: data},function(response){});
 		});
 });
@@ -78,7 +78,7 @@ function calculateSavings(coupons) {
 	if($(".voucher").find(".title").find(".voucher-applied, p").length > 0){
 		savings=$(".price").find(".price-wrapper").text().trim().split("Rs.")[1].trim();
 		savings=parseFloat(savings);
-		console.log("calculateSavings savings:"+ savings);
+		//console.log("calculateSavings savings:"+ savings);
 	}
 	else{
 		savings = 0;
@@ -102,12 +102,12 @@ function finalApply(finalCoupon){
 	preProcessor(finalCoupon);
 }
 function applyNextCoupon(){
-	console.log("Apply next coupon");
+	//console.log("Apply next coupon");
 	setCookie("couponApplied",parseFloat(getCookie("couponApplied"))+1,1);
 	var n = getCookie("couponApplied");
 	
 	var arr =  JSON.parse(getCookie("sortedCoupons"));
-	console.dir(arr);
+	//console.dir(arr);
 
 	if(arr.length>n){
 		chrome.storage.local.set({
@@ -118,7 +118,7 @@ function applyNextCoupon(){
 	}
 }
 function applyPrevCoupon(){
-	console.log("Apply prev coupon");
+	//console.log("Apply prev coupon");
 	setCookie("couponApplied",parseFloat(getCookie("couponApplied"))-1,1);
 	var n = getCookie("couponApplied");
 	
@@ -172,7 +172,7 @@ function endProcess(coupons) {
 }
 function applyCoupons(coupons){
 	var start = parseFloat(getCookie("appliedTill"));
-	console.log("Coupons no:" + start + " ; Coupons length:" +coupons.length);
+	//console.log("Coupons no:" + start + " ; Coupons length:" +coupons.length);
 	if(start==""){
 		start=0;
 	}
@@ -209,7 +209,7 @@ function note(){
 		});
 	var status=0;
 	chrome.storage.local.get(null, function (items) {
-		console.log(items);
+		//console.log(items);
 		status = items.done;
 		var str;
 		var coupon = getCookie("couponID");
@@ -217,13 +217,13 @@ function note(){
 		if(status==1){
 			str="Don't like this coupon! Click to apply next best coupon.";
 			if(items.coupon===""){
-				console.log("No coupons applicable!");
-				$.notify("No coupons applicable!",{className:'error',autoHide:false,clickToHide:false});
+				//console.log("No coupons applicable!");
+				$.notify("No coupons applicable!",{className:'error',autoHide:false,clickToHide:true});
 			}
 			else{
-				$.notify("Coupon : "+items.coupon.id+" & You saved : Rs  "+items.saving,{className:'success',autoHide:false,clickToHide:false});
+				$.notify("Coupon : "+items.coupon.id+" & You saved : Rs  "+items.saving,{className:'success',autoHide:false,clickToHide:true});
 				if(typeof items.coupon.note != "undefined"){
-					$.notify("Note : "+items.coupon.note,{className:'info',autoHide:false,clickToHide:false});
+					$.notify("Note : "+items.coupon.note,{className:'info',autoHide:false,clickToHide:true});
 				}
 			}
 			
@@ -235,13 +235,13 @@ function note(){
 			{ 
 				style: 'buttonNotify',
 				autoHide: false,
-				clickToHide: false
+				clickToHide: true
 			});
 			
 			var n = getCookie("couponApplied");
 			var arr =  JSON.parse(getCookie("sortedCoupons"));
-			console.dir(JSON.stringify((arr.length-1).toString()));
-			console.dir(JSON.stringify(n));
+			//console.dir(JSON.stringify((arr.length-1).toString()));
+			//console.dir(JSON.stringify(n));
 			if(JSON.stringify((arr.length-1).toString())==JSON.stringify(n)){
 				document.getElementById("secondButton").style.display = 'none';
 			}
@@ -286,10 +286,10 @@ function note(){
 function couponCheck(){
 	chrome.storage.local.get('coupons',function (items) {
 		couponsArray = items.coupons;
-		console.dir("Coupon Array=");
-		console.dir(couponsArray);
+		//console.dir("Coupon Array=");
+		//console.dir(couponsArray);
 		var couponApplyingStatus = getCookie("applyingCoupons");
-		console.log("Coupon Applying Status="+ couponApplyingStatus);
+		//console.log("Coupon Applying Status="+ couponApplyingStatus);
 		if(couponApplyingStatus==""){
 			setCookie("applyingCoupons", 0, 1);
 		}

@@ -40,7 +40,7 @@ chrome.runtime.onInstalled.addListener(function(details){
 
 chrome.runtime.onMessage.addListener(
 	function(request,sender,sendResponse){
-	console.log(request);
+	//console.log(request);
 	if(request.message === "UserAuth"){	
 		var NotebookClass = Parse.Object.extend("Notebook");
 		var query = new Parse.Query(NotebookClass);
@@ -48,9 +48,9 @@ chrome.runtime.onMessage.addListener(
 		query.find({
 			success: function(results) {
 			if(results.length > 0){
-				console.log(results[0].get("coupons"));
+				//console.log(results[0].get("coupons"));
 				chrome.storage.sync.get("userID",function(result){
-					console.log(result);
+					//console.log(result);
 					var userID = result.userID;
 					var ExtensionUserClass = Parse.Object.extend("ExtensionUser");
 					var query1 = new Parse.Query(ExtensionUserClass);
@@ -82,10 +82,10 @@ chrome.runtime.onMessage.addListener(
 	}
 	if(request.message === "GetCouponsFoodPanda"){
 		chrome.storage.sync.get("userID",function(res){
-			console.log("User ID = "+res.userID);
+			//console.log("User ID = "+res.userID);
 			Parse.Cloud.run('GetCouponsFoodPanda',{"objectId": res.userID},{
 				success: function(result){
-					console.log("Coupons-Fetched="+result);
+					//console.log("Coupons-Fetched="+result);
 					chrome.tabs.query({active: true,currentWindow: true},function(tabs){
 						chrome.tabs.sendMessage(tabs[0].id,{message:"couponsFetched",coupons:result},function(response){});
 					});
@@ -111,7 +111,7 @@ chrome.runtime.onMessage.addListener(
 		foodpandaObject.set("order", request.data.order);
 		foodpandaObject.set("payable", request.data.payable);
 
-		console.log(request.data);
+		//console.log(request.data);
 		foodpandaObject.save(null, {
 			success: function(foodpandaObject) {
 				setCookie("orderID",foodpandaObject.id,1);
@@ -150,14 +150,14 @@ chrome.runtime.onMessage.addListener(
 						success: function(object) {
 							var coupon = getCookie("coupon");
 							var arr = object.get("coupons");
-							console.log("Previous array is "+ arr);
+							//console.log("Previous array is "+ arr);
 							
 							for(var i=0;i<arr.length;i++){
 								if(arr[i].id===coupon)arr.splice(i,1);
 							}
-							console.dir("Coupons is "+coupon);
+							//console.dir("Coupons is "+coupon);
 
-							console.log("New array is "+ arr);
+							//console.log("New array is "+ arr);
 
 							object.set("coupons",arr);
 

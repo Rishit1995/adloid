@@ -33,8 +33,8 @@ function getCouponsFromCloud(){
 	chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse){
   		if(request.message == "couponsFetched"){
-        console.log("Coupons : ");
-        console.dir(request.coupons);
+        //console.log("Coupons : ");
+        //console.dir(request.coupons);
         chrome.storage.local.set({
           'coupons':request.coupons,
           'done': 0,
