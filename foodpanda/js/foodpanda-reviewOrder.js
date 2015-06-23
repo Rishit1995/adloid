@@ -45,6 +45,7 @@ $(function(){
 			data["comment"]    = comment;
 			data["finalTotal"] = finalTotal;
 			if(coupon===""){
+				chrome.storage.local.set({"saving":""});	
 				chrome.storage.local.set({"coupon":""});
 			}
 			var order = [];
@@ -91,7 +92,6 @@ function calculateSavings(coupons) {
 	applyCoupons(coupons);
 }
 function preProcessor(coupon){
-	
 	$('#voucher-success').removeClass("hide");
 	$('#voucher-error').removeClass("hide");
 	$('#shop_order_cart_type_vouchers').val(coupon.id);
@@ -113,15 +113,29 @@ function applyNextCoupon(){
 		chrome.storage.local.set({
 			'done':1
 		});
+		chrome.storage.local.set({"saving":arr[n]["savings"]});
 		finalApply(arr[n]["coupon"]);
 	}
-	else{
-		chrome.storage.local.set({"coupon":""});
+}
+function applyPrevCoupon(){
+	console.log("Apply prev coupon");
+	setCookie("couponApplied",parseFloat(getCookie("couponApplied"))-1,1);
+	var n = getCookie("couponApplied");
+	
+	var arr =  JSON.parse(getCookie("sortedCoupons"));
+	
+	if(n>=0){
+		chrome.storage.local.set({
+			'done':1
+		});
+		chrome.storage.local.set({"saving":arr[n]["savings"]});
+		finalApply(arr[n]["coupon"]);
 	}
 }
 function sortFunction(a,b){
-	return a.savings - b.savings;
+	return b.savings-a.savings;
 }
+
 function endProcess(coupons) {
 	var couponsWithSavings=[];
 	var n=0;
@@ -138,7 +152,7 @@ function endProcess(coupons) {
 		setCookie(varName,0,-1);
 	}
 	couponsWithSavings.sort(sortFunction);
-	
+
 	if(couponsWithSavings.length>0){
 		bestCouponFound=1;
 		coup_req = couponsWithSavings[0]["coupon"];
@@ -146,13 +160,14 @@ function endProcess(coupons) {
 		setCookie("applyingCoupons", 0,1);
 		setCookie("couponApplied",0,1);
 		setCookie("sortedCoupons",JSON.stringify(couponsWithSavings),1);
-		// alert("Final Coupon : "+coup_req.id);
+		chrome.storage.local.set({"saving":couponsWithSavings[0]["savings"]});
 		finalApply(coup_req);
 	}
 	else{
 		setCookie("couponApplied",-1,1);
 		setCookie("sortedCoupons",JSON.stringify(couponsWithSavings),1);
-		// alert("No coupons found!");
+		chrome.storage.local.set({"saving":""});	
+		chrome.storage.local.set({"coupon":""});
 	}
 }
 function applyCoupons(coupons){
@@ -186,8 +201,8 @@ function note(){
 			"<div class='clearfix'>" +
 			  "<div class='title' data-notify-html='title'/>" +
 			  "<div class='buttons'>" +
-				"<button class='yes' data-notify-text='button'></button>" +
-				"<button class='no'>Cancel</button>" +
+				"<button class='yes' id='firstButton' data-notify-text='buttonFirst'></button>" +
+				"<button class='no' id='secondButton' data-notify-text='buttonSecond'></button>" +
 			  "</div>" +
 			"</div>" +
 		  "</div>"
@@ -200,39 +215,70 @@ function note(){
 		var coupon = getCookie("couponID");
 		var note = getCookie("note");
 		if(status==1){
-			str="Click to apply next best coupon.";
+			str="Don't like this coupon! Click to apply next best coupon.";
 			if(items.coupon===""){
 				console.log("No coupons applicable!");
 				$.notify("No coupons applicable!",{className:'error',autoHide:false,clickToHide:false});
 			}
 			else{
-				$.notify("Coupon : "+items.coupon.id,{className:'success',autoHide:false,clickToHide:false});
+				$.notify("Coupon : "+items.coupon.id+" & You saved : Rs  "+items.saving,{className:'success',autoHide:false,clickToHide:false});
 				if(typeof items.coupon.note != "undefined"){
 					$.notify("Note : "+items.coupon.note,{className:'info',autoHide:false,clickToHide:false});
 				}
 			}
+			
+			$.notify({
+		 		title: str,
+		 		buttonFirst: 'Previous',
+		 		buttonSecond: 'Next'
+			},
+			{ 
+				style: 'buttonNotify',
+				autoHide: false,
+				clickToHide: false
+			});
+			
+			var n = getCookie("couponApplied");
+			var arr =  JSON.parse(getCookie("sortedCoupons"));
+			console.dir(JSON.stringify((arr.length-1).toString()));
+			console.dir(JSON.stringify(n));
+			if(JSON.stringify((arr.length-1).toString())==JSON.stringify(n)){
+				document.getElementById("secondButton").style.display = 'none';
+			}
+			if(n==="0"){
+				document.getElementById("firstButton").style.display = 'none';
+			}
+			$(document).on('click', '.notifyjs-buttonNotify-base .no', function() {
+				applyNextCoupon();
+				$(this).trigger('notify-hide');
+			});
+			$(document).on('click', '.notifyjs-buttonNotify-base .yes', function(){
+				applyPrevCoupon();
+				$(this).trigger('notify-hide');
+			});
+
 		}
 		else{
 			str="Click to apply best coupon.";
+			$.notify({
+		 		title: str,
+		 		buttonFirst: 'Apply',
+		 		buttonSecond: 'Cancel'
+			},
+			{ 
+				style: 'buttonNotify',
+				autoHide: false,
+				clickToHide: false
+			});
+			$(document).on('click', '.notifyjs-buttonNotify-base .no', function() {
+				$(this).trigger('notify-hide');
+			});
+			$(document).on('click', '.notifyjs-buttonNotify-base .yes', function() {
+				startApplyCoupons(couponsArray);
+				$(this).trigger('notify-hide');
+			});
 		}
-		$.notify({
-		  title: str,
-		  button: 'Apply'
-		},
-		{ 
-		  style: 'buttonNotify',
-		  autoHide: false,
-		  clickToHide: false
-		});
-		// Handlers
-		$(document).on('click', '.notifyjs-buttonNotify-base .no', function() {
-			$(this).trigger('notify-hide');
-		});
-		$(document).on('click', '.notifyjs-buttonNotify-base .yes', function() {
-			if(status==1)applyNextCoupon();
-			else startApplyCoupons(couponsArray);
-			$(this).trigger('notify-hide');
-		});
+		
 		});
 	});
 }

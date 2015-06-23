@@ -38,7 +38,8 @@ function getCouponsFromCloud(){
         chrome.storage.local.set({
           'coupons':request.coupons,
           'done': 0,
-          'coupon':""
+          'coupon':"",
+          'saving':""
         })
       }
   });

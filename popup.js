@@ -17,8 +17,8 @@ document.addEventListener('DOMContentLoaded', function () {
 	$('.form-signin').on('submit', function(e){
 		e.preventDefault();
 		
-		var email = document.getElementById("inputEmail").value;
-		var bookID = document.getElementById("inputBookID").value;
+		// var email = document.getElementById("inputEmail").value;
+		// var bookID = document.getElementById("inputBookID").value;
 
 		chrome.runtime.sendMessage({message: "UserAuth",value:bookID,user:email},function(response){
 		  //console.log("userAuth request made");  

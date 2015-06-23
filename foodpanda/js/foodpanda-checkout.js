@@ -9,7 +9,7 @@ $(function(){
         $.notify("No coupons applicable!",{className:'error',autoHide:false,clickToHide:false});
       }
       else{
-        $.notify("Coupon : "+items.coupon.id,{className:'success',autoHide:false,clickToHide:false});
+        $.notify("Coupon : "+items.coupon.id+" & You saved : Rs  "+items.saving,{className:'success',autoHide:false,clickToHide:false});
         if(typeof items.coupon.note != "undefined"){
           $.notify("Note : "+items.coupon.note,{className:'info',autoHide:false,clickToHide:false});
         }

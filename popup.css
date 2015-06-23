@@ -7,6 +7,7 @@ body{
 	background-color: #ffffff;
 	background-image:url("img/background.png");
 	background-repeat: no-repeat;
+	background-size: cover;
 }
 .form-signin-heading{
 	margin: 5px 5px 5px 5px;
@@ -15,10 +16,7 @@ body{
 	margin: 8px 0px 8px 0px;
 }
 #logo {
-	display: block;
-	position: relative;
-	top: 5px;
-	margin: 0px auto;
+	max-height: 200px;
 }
 #options {
 	margin: 5px 0px 5px 0px;
